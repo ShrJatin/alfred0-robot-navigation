@@ -67,8 +67,8 @@
               <horizontal>
                 <samples>${samples}</samples>
                 <resolution>1</resolution>
-                <min_angle>${min_angle}</min_angle>
-                <max_angle>${max_angle}</max_angle>
+                <min_angle>${2*min_angle}</min_angle>
+                <max_angle>${2*max_angle}</max_angle>
               </horizontal>
               <vertical>
                 <samples>${lasers}</samples>
@@ -107,8 +107,8 @@
               <horizontal>
                 <samples>${samples}</samples>
                 <resolution>1</resolution>
-                <min_angle>${min_angle}</min_angle>
-                <max_angle>${max_angle}</max_angle>
+                <min_angle>${2*min_angle}</min_angle>
+                <max_angle>${2*max_angle}</max_angle>
               </horizontal>
               <vertical>
                 <samples>${lasers}</samples>

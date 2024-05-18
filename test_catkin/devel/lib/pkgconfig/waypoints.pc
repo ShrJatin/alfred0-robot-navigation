@@ -1,0 +1,8 @@
+prefix=/home/orinprayaas/DRL-robot-navigation/test_catkin/devel
+
+Name: waypoints
+Description: Description of waypoints
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: rospy roscpp std_msgs

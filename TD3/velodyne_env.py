@@ -85,8 +85,8 @@ class GazeboEnv:
         self.set_self_state.pose.position.z = 0.0
         self.set_self_state.pose.orientation.x = 0.0
         self.set_self_state.pose.orientation.y = 0.0
-        self.set_self_state.pose.orientation.z = 0.0
-        self.set_self_state.pose.orientation.w = 1.0
+        self.set_self_state.pose.orientation.z = 0.7071067811865475
+        self.set_self_state.pose.orientation.w = 0.7071067811865476
 
         self.gaps = [[-np.pi / 2 - 0.03, -np.pi / 2 + np.pi / self.environment_dim]]
         for m in range(self.environment_dim - 1):
@@ -150,6 +150,9 @@ class GazeboEnv:
 
     def odom_callback(self, od_data):
         self.last_odom = od_data
+
+    def get_state(self):
+        pass
 
     # Perform an action and read a new state
     def step(self, action):
@@ -228,6 +231,7 @@ class GazeboEnv:
 
         robot_state = [distance, theta, action[0], action[1]]
         state = np.append(laser_state, robot_state)
+
         reward = self.get_reward(target, collision, action, min_laser)
         return state, reward, done, target
 
@@ -241,16 +245,17 @@ class GazeboEnv:
         except rospy.ServiceException as e:
             print("/gazebo/reset_simulation service call failed")
 
-        angle = np.random.uniform(-np.pi, np.pi)
+        angle = np.pi/2
         quaternion = Quaternion.from_euler(0.0, 0.0, angle)
+        # print(quaternion.x, quaternion.y, quaternion.z, quaternion.w)
         object_state = self.set_self_state
 
         x = 0
         y = 0
         position_ok = False
         while not position_ok:
-            x = np.random.uniform(-4.5, 4.5)
-            y = np.random.uniform(-4.5, 4.5)
+            x = 0
+            y = 0
             position_ok = check_pos(x, y)
         object_state.pose.position.x = x
         object_state.pose.position.y = y
@@ -327,9 +332,15 @@ class GazeboEnv:
         goal_ok = False
 
         while not goal_ok:
-            self.goal_x = self.odom_x + random.uniform(self.upper, self.lower)
-            self.goal_y = self.odom_y + random.uniform(self.upper, self.lower)
+            # self.goal_x = self.odom_x + random.uniform(self.upper, self.lower)
+            # self.goal_x = self.odom_x + random.uniform(self.upper, self.upper) + 4
+
+            # self.goal_y = self.odom_y + random.uniform(self.upper, self.lower)
+            shift = random.uniform(self.upper, self.lower)
+            self.goal_x = self.odom_x + shift
+            self.goal_y = self.odom_y + random.uniform(self.upper, self.lower/2)
             goal_ok = check_pos(self.goal_x, self.goal_y)
+            print(self.upper, self.lower, shift, "ADcsdcsdc")
 
     def random_box(self):
         # Randomly change the location of the boxes in the environment on each reset to randomize the training
